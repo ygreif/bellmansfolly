@@ -1,10 +1,10 @@
 import numpy
 
-from model import state, action
+from model import state_space, action_space
 import simulator
 
 
-class SingleDimStateSpace(state.StateSpace):
+class SingleDimStateSpace(state_space.StateSpace):
     def __init__(self, len):
         self.d = [1, len]
 
@@ -15,7 +15,7 @@ class SingleDimStateSpace(state.StateSpace):
         return [(0, i) for i in xrange(self.dim()[1])]
 
 
-class SingleDimActionSpace(action.ActionSpace):
+class SingleDimActionSpace(action_space.ActionSpace):
     def __init__(self, choices, valuations, len):
         self.choices = choices
         self.valuations = valuations
