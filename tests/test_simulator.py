@@ -47,7 +47,6 @@ sim = simulator.Simulator(s_s, a_s, discount)
 
 def test_find_best_policy_for_state():
     best_action, best_value = sim.find_best_policy_for_state((0, 0), value_func)
-    print best_action, best_value
     assert best_action == 0
     assert best_value == 1 + .5 * (.75 * 1.5 + .25 * 2)
 
@@ -59,8 +58,6 @@ def test_iterate():
 def test_find_best_policy():
     final_payoff, best_policy = sim.find_best_policy()
     next_payoff, next_policy = sim.iterate(final_payoff)
-    print best_policy
-    print final_payoff
     # check policies are the same and payoffs are within epsilon
     for idx in xrange(s_s.dim()[1]):
         assert best_policy[0][idx] == next_policy[0][idx]
