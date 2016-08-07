@@ -5,8 +5,8 @@ import simulator
 
 
 class SingleDimStateSpace(state_space.StateSpace):
-    def __init__(self, len):
-        self.d = [1, len]
+    def __init__(self, length):
+        self.d = [1, length]
 
     def dim(self):
         return self.d
@@ -16,23 +16,23 @@ class SingleDimStateSpace(state_space.StateSpace):
 
 
 class SingleDimActionSpace(action_space.ActionSpace):
-    def __init__(self, transition_probabilities, choices, valuations, len):
+    def __init__(self, transition_probabilities, choices, valuations, length):
         self.transitions = transition_probabilities
         self.choices = choices
         self.valuations = valuations
-        self.len = len
+        self.length = length
 
     def get_actions(self, state):
         for choice in self.choices:
             potential_action = choice + state[1]
-            if 0 <= potential_action < self.len:
+            if 0 <= potential_action < self.length:
                 yield (choice, -1 * choice * choice + self.valuations[state])
 
     def transition_probabilities(self, action, state):
         loc = state[1]
         for delta, prob in self.transitions:
-            next_loc = min(max(loc + action + delta, 0), self.len - 1)
-            if 0 <= next_loc < self.len:
+            next_loc = min(max(loc + action + delta, 0), self.length- 1)
+            if 0 <= next_loc < self.length:
                 yield (0, next_loc), prob
 
 
