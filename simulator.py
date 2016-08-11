@@ -1,8 +1,10 @@
 import numpy
 
+#import growth.growth_model as g
+
 
 class SimulationParameters(object):
-    def __init__(self, discount=.9, max_iterations=1000, tolerance=0.01):
+    def __init__(self, discount=.9, max_iterations=10, tolerance=0.0000001):
         self.discount = discount
         self.max_iterations = max_iterations
         self.tolerance = tolerance
@@ -39,21 +41,28 @@ class Simulator(object):
         return best_action, best_payoff
 
     def iterate(self, value_func):
-        next_value_func = numpy.ndarray(self.state_space.dim())
-        next_policy_func = numpy.ndarray(self.state_space.dim())
+        next_value_func = numpy.zeros(self.state_space.dim(), numpy.float)
+        next_policy_func = numpy.zeros(self.state_space.dim())
 
         for state in self.state_space.states():
             action, value = self.find_best_policy_for_state(state, value_func)
             next_value_func[state] = value
             next_policy_func[state] = action
-
         return next_value_func, next_policy_func
 
     def find_best_policy(self):
-        value_func = numpy.ndarray(self.state_space.dim())
+        value_func = numpy.zeros(self.state_space.dim(), dtype=numpy.float)
         for i in range(self.max_iterations):
             next_value_func, next_policy_func = self.iterate(value_func)
             if numpy.amax(abs(value_func - next_value_func)) < self.tolerance:
                 break
             value_func = next_value_func
         return next_value_func, next_policy_func
+
+'''
+params = SimulationParameters(discount=g.beta)
+state_space = g.GrowthEconomyStateSpace(g.tfp_by_state, g.k_precision)
+action_space = g.GrowthEconomyActionSpace(state_space)
+s = Simulator(state_space, action_space, params)
+value_func, policy_func = s.find_best_policy()
+'''

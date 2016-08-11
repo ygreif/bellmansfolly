@@ -11,7 +11,7 @@ delta = 1  # deprecation of capital
 
 
 def utility(c):
-    return math.log(c)
+    return (1 - beta) * math.log(c)
 
 
 def production(k, tfp):
@@ -25,7 +25,7 @@ state_transitions = numpy.array([[0.9727, 0.0273, 0.0000, 0.0000, 0.0000],
                                   [0.0000, 0.0000, 0.0000, 0.0273, 0.9727]], float)
 
 capital_steady_state = (alpha*beta)**(1/(1-alpha))
-k_precision = 0.001
+k_precision = 0.0001
 min_capital = int(capital_steady_state / 2.0 / k_precision) * k_precision
 max_capital = int(capital_steady_state * 1.5 / k_precision) * k_precision
 
@@ -58,8 +58,8 @@ class GrowthEconomyActionSpace(action_space.ActionSpace):
         self._transitions = {}
 
     def get_actions(self, state):
-        if state[0] in self._actions_by_tfp_level:
-            return self._actions_by_tfp_level[state[0]]
+        if state in self._actions_by_tfp_level:
+            return self._actions_by_tfp_level[state]
         tfp = tfp_by_state[state[0]]
         k = self.state_space.state_to_capital(state)
         output = production(k, tfp)
