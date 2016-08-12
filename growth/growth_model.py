@@ -66,7 +66,7 @@ class GrowthEconomyActionSpace(action_space.ActionSpace):
         result = []
         for next_k in numpy.arange(min_capital, min(max_capital, output), k_precision):
             result.append((next_k, utility(production(k, tfp) - next_k)))
-        self._actions_by_tfp_level[state[0]] = result
+        self._actions_by_tfp_level[state] = result
         return result
 
     def transition_probabilities(self, action, state):
